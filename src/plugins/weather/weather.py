@@ -275,9 +275,5 @@ class Weather(BasePlugin):
         if not 200 <= response.status_code < 300:
             logging.error(f"Failed to get location: {response.content}")
             raise RuntimeError("Failed to retrieve location.")
-<<<<<<< HEAD
-        
-=======
 
->>>>>>> branch-name
         return response.json()[0]
