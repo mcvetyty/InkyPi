@@ -16,6 +16,7 @@
         <div class="current-weather">
           <div class="current-temp">{{ current_temperature }}<span class="temperature-unit">{{temperature_unit}}</span></div>
           <div class="feels-like">Feels Like {{ feels_like }}{% if units != "standard" %}°{% endif %}</div>
+          <div class="feels-like">High: {{ hi }}{% if units != "standard" %}°{% endif %} Low: {{ low }}{% if units != "standard" %}°{% endif %}</div>
         </div>
     </div>
 
@@ -34,6 +35,7 @@
           </div>
         </div>
       {% endfor %}
+      <div class="data-point-summary">{{ summary }}.</div>
     </div>
     {% endif %}
   </div>
@@ -76,8 +78,11 @@
     const precipitation = [{% for hour in hourly_forecast %}{{ hour.precipitiation * 100}}{% if not loop.last %}, {% endif %}{% endfor %}]; // Convert to percentage
 
     // Find min and max temperatures
-    const minTemp = Math.min(...temperatures);
-    var maxTemp = Math.max(...temperatures);
+//    const minTemp = Math.min(...temperatures);
+//    var maxTemp = Math.max(...temperatures);
+    const minTemp = Math.floor(Math.min(...temperatures) / 5) * 5;
+    const rawMaxTemp = Math.max(...temperatures);
+    const maxTemp = Math.ceil((rawMaxTemp + 2) / 5) * 5;
 
     if (maxTemp - minTemp < 4){
       maxTemp += 2;
@@ -147,6 +152,11 @@
                 family: 'Jost'
               },
               autoSkip: false,
+//              callback: function(value, index, values) {
+//                if (value === minTemp) return minTemp + "°";
+//                if (value === maxTemp + 1) return maxTemp + "°";
+//               return '';
+//              }
               callback: function(value, index, values) {
                 if (index === values.length-1) return maxTemp + "°";
                 else if (index === 0) return minTemp + "°";
@@ -154,8 +164,10 @@
               }
             },
             grid: { display: false },
-            suggestedMin: minTemp,
-            suggestedMax: maxTemp,
+//            suggestedMin: minTemp,
+//            suggestedMax: maxTemp,
+            min: minTemp,
+            max: maxTemp,
           },
           y1: {
             position: 'right',
@@ -173,8 +185,10 @@
                 else return '';
               }
             },
-            suggestedMin: 0,
-            suggestedMax: 100,
+            min: 0,
+            max: 100,
+//            suggestedMin: 0,
+//            suggestedMax: 100,
           }
         },
         plugins: { legend: { display: false}}, // Hide legend
@@ -199,7 +213,8 @@
     chart.data.datasets[0].backgroundColor = tempGradient;
 
     // Create gradient based on y-axis values
-    const precipitationGradient = ctx.createLinearGradient(0, gradientStart, 0, gradientEnd);
+//    const precipitationGradient = ctx.createLinearGradient(0, gradientStart, 0, gradientEnd);
+    const precipitationGradient = ctx.createLinearGradient(0, chart.scales['y1'].top, 0, chart.scales['y1'].bottom);
     precipitationGradient.addColorStop(0, 'rgba(26, 111, 176, 0.9)'); // Top of the gradient (max temperature)
     precipitationGradient.addColorStop(1, 'rgba(194, 223, 246, 0)'); // Bottom of the gradient (min temperature)
 

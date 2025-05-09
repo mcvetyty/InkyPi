@@ -1,0 +1,55 @@
+{
+    "name": "InkyPi",
+    "orientation": "horizontal",
+    "scheduler_sleep_time": 60,
+    "startup": false,
+    "resolution": [
+        800,
+        480
+    ],
+    "playlist_config": {
+        "playlists": [
+            {
+                "name": "Default",
+                "start_time": "00:00",
+                "end_time": "24:00",
+                "plugins": [
+                    {
+                        "plugin_id": "weather",
+                        "name": "Weather",
+                        "plugin_settings": {
+                            "latitude": "42.52609221723228",
+                            "longitude": "-83.25757026672363",
+                            "units": "imperial",
+                            "displayMetrics": "true",
+                            "displayGraph": "true",
+                            "displayForecast": "true",
+                            "forecastDays": "7",
+                            "selectedFrame": "None",
+                            "margin": "5",
+                            "backgroundOption": "color",
+                            "backgroundColor": "#ffffff",
+                            "textColor": "#000000"
+                        },
+                        "refresh": {
+                            "interval": 3600
+                        },
+                        "latest_refresh_time": "2025-05-08T20:12:42.859290-04:00"
+                    }
+                ],
+                "current_plugin_index": 0
+            }
+        ],
+        "active_playlist": "Default"
+    },
+    "refresh_info": {
+        "refresh_time": "2025-05-08T20:47:55.682250-04:00",
+        "image_hash": "b97733d5d7891b08734fd67c52a3b9a69a6c2e0810aa9c17e05c4d06a896cb6b",
+        "refresh_type": "Playlist",
+        "plugin_id": "weather",
+        "playlist": "Default",
+        "plugin_instance": "Weather"
+    },
+    "timezone": "America/Detroit",
+    "plugin_cycle_interval_seconds": 60
+}

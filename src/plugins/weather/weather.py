@@ -80,12 +80,22 @@ class Weather(BasePlugin):
         dt = datetime.fromtimestamp(current.get('dt'), tz=timezone.utc).astimezone(tz)
         current_icon = current.get("weather")[0].get("icon").replace("n", "d")
         location_str = f"{location_data.get('name')}, {location_data.get('state', location_data.get('country'))}"
+
+        # Get today's high/low from the first daily forecast item
+        today_temp = weather_data.get("daily", [{}])[0].get("temp", {})
+        high = round(today_temp.get("max", 0))
+        low = round(today_temp.get("min", 0))
+        summary = weather_data.get("daily", [{}])[0].get("summary", "")
+
         data = {
             "current_date": dt.strftime("%A, %B %d"),
             "location": location_str,
             "current_day_icon": self.get_plugin_dir(f'icons/{current_icon}.png'),
             "current_temperature": str(round(current.get("temp"))),
             "feels_like": str(round(current.get("feels_like"))),
+            "hi": str(high),
+            "low": str(low),
+            "summary": summary,
             "temperature_unit": UNITS[units]["temperature"],
             "units": units
         }
@@ -156,12 +166,12 @@ class Weather(BasePlugin):
             "icon": self.get_plugin_dir('icons/humidity.png')
         })
 
-        data_points.append({
-            "label": "Pressure",
-            "measurement": weather.get('current', {}).get("pressure"),
-            "unit": 'hPa',
-            "icon": self.get_plugin_dir('icons/pressure.png')
-        })
+#        data_points.append({
+#            "label": "Pressure",
+#            "measurement": weather.get('current', {}).get("pressure"),
+#            "unit": 'hPa',
+#            "icon": self.get_plugin_dir('icons/pressure.png')
+#        })
 
         data_points.append({
             "label": "UV Index",
@@ -170,14 +180,14 @@ class Weather(BasePlugin):
             "icon": self.get_plugin_dir('icons/uvi.png')
         })
 
-        visibility = weather.get('current', {}).get("visibility")/1000
-        visibility_str = f">{visibility}" if visibility >= 10 else visibility
-        data_points.append({
-            "label": "Visibility",
-            "measurement": visibility_str,
-            "unit": 'km',
-            "icon": self.get_plugin_dir('icons/visibility.png')
-        })
+#        visibility = weather.get('current', {}).get("visibility")/1000
+#        visibility_str = f">{visibility}" if visibility >= 10 else visibility
+#        data_points.append({
+#            "label": "Visibility",
+#            "measurement": visibility_str,
+#            "unit": 'km',
+#            "icon": self.get_plugin_dir('icons/visibility.png')
+#        })
 
         aqi = air_quality.get('list', [])[0].get("main", {}).get("aqi")
         data_points.append({
